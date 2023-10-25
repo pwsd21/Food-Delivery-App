@@ -1,25 +1,13 @@
-import { useState, useEffect } from "react";
+import useRestaurantMenu from "../utils/useRestaurantMenu";
 import Shimmer from "./Shimmer";
 import { useParams } from "react-router-dom";
 
 const RestaurantMenu = () => {
-  const [resInfo, setResInfo] = useState(null);
+  const { resId } = useParams();
+  console.log(resId);
 
-  const params = useParams();
-  console.log(params);
-
-  useEffect(() => {
-    fetchMenu();
-  }, []);
-
-  const fetchMenu = async () => {
-    const data = await fetch(
-      "https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=12.9715987&lng=77.5945627&restaurantId=32603&catalog_qa=undefined&query=Burger&submitAction=ENTER"
-    );
-    const json = await data.json();
-    console.log(json);
-    setResInfo(json?.data);
-  };
+  const resInfo = useRestaurantMenu(resId);
+  console.log(resInfo, "ress");
 
   if (resInfo === null) {
     return <Shimmer />;
@@ -28,6 +16,8 @@ const RestaurantMenu = () => {
   const { name, cuisines, avgRating, costForTwoMessage } =
     resInfo?.cards[0]?.card?.card?.info;
 
+  const { itemCards } =
+    resInfo?.cards[2].groupedCard?.cardGroupMap?.REGULAR?.cards[1]?.card?.card;
   return (
     <div>
       <h1>{name}</h1>
@@ -36,9 +26,12 @@ const RestaurantMenu = () => {
       <h3>{costForTwoMessage}</h3>
       <h2>Menu</h2>
       <ul>
-        <li>Biryani</li>
-        <li>Burgers</li>
-        <li>Diet Coke</li>
+        {itemCards?.map((item) => (
+          <li key={item.card.info.id}>
+            {item.card.info.name} - {"Rs"}
+            {item.card.info.price / 100}
+          </li>
+        ))}
       </ul>
     </div>
   );
