@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { RestaurantCard } from "./RestaurantCard";
+import RestaurantCard, { withPromotedLabel } from "./RestaurantCard";
 import Shimmer from "./Shimmer";
 import { RESTAURANTS_API } from "../utils/constants";
 import { Link } from "react-router-dom";
@@ -9,6 +9,8 @@ const Body = () => {
   const [listOfRestaurants, setListOfRestaurants] = useState([]);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [searchText, setSearchText] = useState("");
+
+  const RestaurantCardPromoted = withPromotedLabel(RestaurantCard);
 
   // Simplified way to use useState - it's just array destructuring
   //   const arr = useState(resList);
@@ -22,6 +24,13 @@ const Body = () => {
     setFilteredRestaurants(filteredList);
   };
 
+  const handlePromotedRestaurants = () => {
+    const promotedList = listOfRestaurants.filter(
+      (item) => item.info.locality === "Huda Market"
+    );
+    setFilteredRestaurants(promotedList);
+  };
+
   const fetchData = async () => {
     const data = await fetch(RESTAURANTS_API);
     const json = await data.json();
@@ -33,6 +42,7 @@ const Body = () => {
     );
   };
 
+  console.log(listOfRestaurants, "lss");
   useEffect(() => {
     fetchData();
   }, []);
@@ -49,16 +59,17 @@ const Body = () => {
   }
 
   return (
-    <div className="body">
-      <div className="filter">
-        <div className="search">
+    <div className="body bg-gray-200">
+      <div className="filter flex">
+        <div className="search m-4 p-4">
           <input
             type="text"
-            className="search-box"
+            className="border border-solid border-black"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
           />
           <button
+            className="px-3 py-1 bg-green-100 m-4 rounded-lg font-semibold"
             onClick={() => {
               const filteredRestaurant = listOfRestaurants.filter((item) =>
                 item.info.name
@@ -71,15 +82,30 @@ const Body = () => {
             Search
           </button>
         </div>
-        <button className="filter-btn" onClick={handleFilter}>
-          Filter Top Rated Restaurants
-        </button>
+        <div className="flex items-center">
+          <button
+            className="px-3 py-1 bg-blue-100 m-4 rounded-lg font-semibold"
+            onClick={handleFilter}
+          >
+            {"✨"} Top Rated Restaurants
+          </button>
+          <button
+            className="px-3 py-1 bg-blue-100 m-4 rounded-lg font-semibold"
+            onClick={handlePromotedRestaurants}
+          >
+            {"🎯"} Promoted Restaurants
+          </button>
+        </div>
       </div>
-      <div className="res-container">
+      <div className="flex flex-wrap bg-yellow-50 sm:bg-gray-100">
         {filteredRestaurants.map((item) => {
           return (
             <Link key={item.info.id} to={"/restaurants/" + item.info.id}>
-              <RestaurantCard resData={item} />
+              {item.info.locality === "Huda Market" ? (
+                <RestaurantCardPromoted resData={item} />
+              ) : (
+                <RestaurantCard resData={item} />
+              )}
             </Link>
           );
         })}
