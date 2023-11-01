@@ -66,3 +66,12 @@
 
 // // this is used to convert this object toh1 tag and put it onto the DOM
 // root.render(parent);
+
+# Redux Toolkit
+
+- Install @reduxjs/toolkit and react-redux
+- Build Our Store
+- Connect our store to the app
+- Slice (cartSlice)
+- dispatch ( action )
+- Selector

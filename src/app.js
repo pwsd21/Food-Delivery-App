@@ -7,6 +7,9 @@ import Contact from "./components/Contact";
 import Error from "./components/Error";
 import RestaurantMenu from "./components/RestaurantMenu";
 import UserContext from "./utils/UserContext";
+import { Provider } from "react-redux";
+import appStore from "./utils/appStore";
+import Cart from "./components/Cart";
 
 // Chunking
 // Code Splitting
@@ -28,16 +31,15 @@ const AppLayout = () => {
     setUserName(data.name);
   }, []);
   return (
-    // Default User
-    <UserContext.Provider value={{ loggedInUser: userName }}>
-      {/* Pawan Sachdeva */}
-      <div className="app">
-        <UserContext.Provider value={{ loggedInUser: "Virat Kohli" }}>
+    <Provider store={appStore}>
+      <UserContext.Provider value={{ loggedInUser: userName, setUserName }}>
+        {/* Pawan Sachdeva */}
+        <div className="app">
           <Header />
-        </UserContext.Provider>
-        <Outlet />
-      </div>
-    </UserContext.Provider>
+          <Outlet />
+        </div>
+      </UserContext.Provider>
+    </Provider>
   );
 };
 
@@ -60,7 +62,11 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/contact",
-        element: <Contact />,
+        element: (
+          <Suspense fallback={<h1>Loading...</h1>}>
+            <Contact />
+          </Suspense>
+        ),
       },
       {
         path: "/grocery",
@@ -73,6 +79,14 @@ const appRouter = createBrowserRouter([
       {
         path: "/restaurants/:resId",
         element: <RestaurantMenu />,
+      },
+      {
+        path: "/cart",
+        element: (
+          <Suspense fallback={<h1>Loading...</h1>}>
+            <Cart />
+          </Suspense>
+        ),
       },
     ],
     errorElement: <Error />,

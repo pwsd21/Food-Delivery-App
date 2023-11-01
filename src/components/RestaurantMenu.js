@@ -5,7 +5,7 @@ import Shimmer from "./Shimmer";
 import { useParams } from "react-router-dom";
 
 const RestaurantMenu = () => {
-  const [showIndex, setShowIndex] = useState(1);
+  const [showIndex, setShowIndex] = useState();
   const { resId } = useParams();
   console.log(resId);
 
