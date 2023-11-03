@@ -75,3 +75,17 @@
 - Slice (cartSlice)
 - dispatch ( action )
 - Selector
+
+# Developer Testing ( Setting up testing in our app)
+
+- Install React Testing Library
+- Install Jest
+- Install Babel Dependencies
+- configure Babel ( babel.config.js )
+- configure Parcel config file (.parecelrc) to disable default babel transpilation
+- Jest Configuration
+- Jest : npx jest --init ( This will create jest.config.js)
+- Install Jsdom library
+- Install - npm i -D @babel/preset-react - to make jsx work in test cases
+- Include @babel/present-react inside my babel config
+- Install - npm i -D @testing-library/jest-dom ( to fix toBeInTheDocument not a function ERROR)
