@@ -1,14 +1,11 @@
 import ItemList from "./ItemList";
 
 const RestaurantCategory = ({ data, showItems, setShowIndex }) => {
-  // console.log(data, showItems);
-
   const handleClick = () => {
     setShowIndex();
   };
   return (
     <div>
-      {/* Header */}
       <div className="w-7/12 mx-auto my-4 bg-gray-100 shadow-lg ">
         <div
           className="flex justify-between cursor-pointer"
@@ -20,7 +17,6 @@ const RestaurantCategory = ({ data, showItems, setShowIndex }) => {
           </span>
           <span className="pr-4">⬇️</span>
         </div>
-        {/* Accordion Body */}
         {showItems && <ItemList items={data.itemCards} />}
       </div>
     </div>

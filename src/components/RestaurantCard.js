@@ -46,10 +46,6 @@ const RestaurantCard = ({ resData }) => {
   );
 };
 
-// Higher Order Component
-
-// Input - Restaurant card  ==> Returns PromotedRestaurantCard
-
 export const withPromotedLabel = (RestaurantCard) => {
   return (props) => {
     return (

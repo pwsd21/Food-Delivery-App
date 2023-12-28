@@ -1,17 +1,14 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import RestaurantCard, { withPromotedLabel } from "./RestaurantCard";
 import Shimmer from "./Shimmer";
 import { RESTAURANTS_API } from "../utils/constants";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
-import UserContext from "../utils/UserContext";
 
 const Body = () => {
   const [listOfRestaurants, setListOfRestaurants] = useState([]);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [searchText, setSearchText] = useState("");
-
-  const { loggedInUser, setUserName } = useContext(UserContext);
 
   const RestaurantCardPromoted = withPromotedLabel(RestaurantCard);
 
@@ -29,7 +26,14 @@ const Body = () => {
 
   const handlePromotedRestaurants = () => {
     const promotedList = listOfRestaurants.filter(
-      (item) => item.info.locality === "Huda Market"
+      (item) => item.info.locality == "Huda Market"
+    );
+    setFilteredRestaurants(promotedList);
+  };
+
+  const handleFastDeliveryRestaurants = () => {
+    const promotedList = listOfRestaurants.filter(
+      (item) => item.info.sla.deliveryTime <= 30
     );
     setFilteredRestaurants(promotedList);
   };
@@ -38,14 +42,13 @@ const Body = () => {
     const data = await fetch(RESTAURANTS_API);
     const json = await data.json();
     setListOfRestaurants(
-      json?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle?.restaurants
+      json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants
     );
     setFilteredRestaurants(
-      json?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle?.restaurants
+      json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants
     );
   };
 
-  console.log(listOfRestaurants, "lss");
   useEffect(() => {
     fetchData();
   }, []);
@@ -95,23 +98,23 @@ const Body = () => {
           </button>
           <button
             className="px-3 py-1 bg-blue-100 m-4 rounded-lg font-semibold"
+            onClick={handleFastDeliveryRestaurants}
+          >
+            {"⌛"} Fast Delivery
+          </button>
+          <button
+            className="px-3 py-1 bg-blue-100 m-4 rounded-lg font-semibold"
             onClick={handlePromotedRestaurants}
           >
             {"🎯"} Promoted Restaurants
           </button>
-          {/* <label>UserName </label>
-          <input
-            className="border border-black"
-            value={loggedInUser}
-            onChange={(e) => setUserName(e.target.value)}
-          /> */}
         </div>
       </div>
       <div className="flex flex-wrap bg-yellow-50 sm:bg-gray-100">
         {filteredRestaurants.map((item) => {
           return (
             <Link key={item.info.id} to={"/restaurants/" + item.info.id}>
-              {item.info.locality === "Huda Market" ? (
+              {item.info.locality == "Huda Market" ? (
                 <RestaurantCardPromoted resData={item} />
               ) : (
                 <RestaurantCard resData={item} />

@@ -18,6 +18,6 @@ test("should load contact us component", () => {
 
 test("should load input name inside contact component", () => {
   render(<Contact />);
-  const inputName = screen.getByPlaceholderText("name");
+  const inputName = screen.getByPlaceholderText("Enter Your Name");
   expect(inputName).toBeInTheDocument();
 });

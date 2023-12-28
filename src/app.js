@@ -33,7 +33,6 @@ const AppLayout = () => {
   return (
     <Provider store={appStore}>
       <UserContext.Provider value={{ loggedInUser: userName, setUserName }}>
-        {/* Pawan Sachdeva */}
         <div className="app">
           <Header />
           <Outlet />
